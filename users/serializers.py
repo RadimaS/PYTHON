@@ -1,12 +1,27 @@
-from .models import CustomUser
+from users.models import CustomUser, Photos
 from rest_framework import serializers
+from friends.models import Follow
+
+
+class PhotosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photos
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='first_name')
+    photos = PhotosSerializer()
 
-    created_at = serializers.CharField(source='date_joined')
+    followed = serializers.SerializerMethodField()
+
+    def get_followed(self, user):
+        me = self.context['request'].user
+        if me.is_anonymous:
+            return False
+
+        return Follow.objects.filter(follower=me, followed=user).exists()
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'created_at']
-
+        fields = ['id', 'name', 'email', 'status', 'photos', 'followed']
