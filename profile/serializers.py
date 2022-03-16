@@ -1,23 +1,17 @@
-from users.models import CustomUser, Photos
+from models import Profile, Contacts
 from rest_framework import serializers
 from follows.models import Follow
 
 
-class StatusSerializer(serializers.ModelSerializer):
+class ContactsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = ['status']
-
-
-class PhotosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Photos
+        model = Contacts
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='first_name')
-    photos = PhotosSerializer()
+    contacts = ContactsSerializer()
 
     followed = serializers.SerializerMethodField()
 
@@ -29,5 +23,5 @@ class UserSerializer(serializers.ModelSerializer):
         return Follow.objects.filter(follower=me, followed=user).exists()
 
     class Meta:
-        model = CustomUser
+        model = Profile
         fields = ['id', 'name', 'email', 'status', 'photos', 'followed']
