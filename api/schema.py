@@ -1,5 +1,6 @@
 from graphene import ObjectType, String, Schema
 from users.query import Query as UsersQuery
+from profiles.mutations import ProfileMutation
 
 
 class Query(UsersQuery, ObjectType):
@@ -7,4 +8,8 @@ class Query(UsersQuery, ObjectType):
     goodbye = String()
 
 
-schema = Schema(query=Query)
+class Mutation(ProfileMutation):
+    pass
+
+
+schema = Schema(query=Query, mutation=Mutation)
