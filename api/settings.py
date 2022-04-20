@@ -31,7 +31,9 @@ DEBUG = bool(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-AUTH_USER_MODEL = 'api.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
+
+MAX_COUNT_POSTS = 2
 
 # Application definition
 
@@ -41,11 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.staticfiles",  # Required for GraphiQL
+    "graphene_django",
     'rest_framework',
-    'api',
-    'friends',
-    'contacts'
+    'users',
+    'follows',
+    'profiles',
+    'posts'
 ]
 
 MIDDLEWARE = [
@@ -78,6 +82,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
+GRAPHENE = {
+    "SCHEMA": "api.schema.schema"
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
